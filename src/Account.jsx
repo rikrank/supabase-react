@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Avatar } from './Avatar'
 import { supabase } from './supabaseClient'
 
 const Account = ({ session }) => {
@@ -77,6 +78,16 @@ const Account = ({ session }) => {
         'Saving ...'
       ) : (
         <form onSubmit={updateProfile} className="form-widget">
+
+          <Avatar
+            url={avatar_url}
+            size={150}
+            onUpload={(url) => {
+              setAvatarUrl(url)
+              updateProfile({ username, website, avatar_url: url })
+            }}
+          />
+
           <div>Email: {session.user.email}</div>
           <div>
             <label htmlFor="username">Name</label>
@@ -101,11 +112,11 @@ const Account = ({ session }) => {
               Update profile
             </button>
           </div>
+          <button type="button" className="button block" onClick={() => supabase.auth.signOut()}>
+            Sign Out
+          </button>
         </form>
       )}
-      <button type="button" className="button block" onClick={() => supabase.auth.signOut()}>
-        Sign Out
-      </button>
     </div>
   )
 }
